@@ -24,7 +24,7 @@ const App = () => {
 
   const fetchData = async () => {
     try {
-      const result = await axios.get("http://localhost:8080/names");
+      const result = await axios.get("/names");
       setData(result.data);
     } catch (err) {
       console.log(err);
