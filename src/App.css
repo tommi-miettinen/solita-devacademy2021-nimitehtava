@@ -1,0 +1,19 @@
+.container {
+  width: 60%;
+}
+
+.tablehead {
+  padding-right: 10px;
+}
+
+@media only screen and (max-width: 1201px) {
+  .container {
+    width: 100%;
+  }
+}
+
+@media only screen and (max-width: 800px) {
+  .tablehead {
+    display: none;
+  }
+}
