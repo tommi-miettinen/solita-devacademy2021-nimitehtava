@@ -14,9 +14,14 @@ import TextField from "@material-ui/core/TextField";
 import "./App.css";
 
 const App = () => {
-  const [data, setData] = useState({ names: [] });
-  const [searchInput, setSearchInput] = useState("");
-  const [sortBy, setSortBy] = useState("popularity");
+  const [data, setData] = useState<{ names: Name[] }>({ names: [] });
+  const [searchInput, setSearchInput] = useState<string>("");
+  const [sortBy, setSortBy] = useState<string>("popularity");
+
+  interface Name {
+    amount: number;
+    name: string;
+  }
 
   useEffect(() => {
     fetchData();
@@ -31,28 +36,29 @@ const App = () => {
     }
   };
 
-  const calculateTotalAmount = (arr) => {
+  const calculateTotalAmount = (arr: Name[]) => {
     return arr.reduce((total, item) => item.amount + total, 0);
   };
 
-  const filterByName = (arr) => {
+  const filterByName = (arr: Name[]) => {
     return arr.filter((el) =>
       el.name.toLowerCase().includes(searchInput.toLowerCase())
     );
   };
 
-  const sortByAlphabet = (arr) => {
-    return [...arr.sort((a, b) => (a.name > b.name ? 1 : -1))];
+  const sortByAlphabet = (arr: Name[]) => {
+    return [...arr].sort((a, b) => (a.name > b.name ? 1 : -1));
   };
 
-  const sortByPopularity = (arr) => {
-    return [...arr.sort((a, b) => b.amount - a.amount)];
+  const sortByPopularity = (arr: Name[]) => {
+    return [...arr].sort((a, b) => b.amount - a.amount);
   };
 
   const sort = () => {
-    const filtered = filterByName(data.names);
-    if (sortBy === "popularity") return sortByPopularity(filtered);
-    if (sortBy === "alphabet") return sortByAlphabet(filtered);
+    const { names } = data;
+    if (sortBy === "popularity") return sortByPopularity(filterByName(names));
+    if (sortBy === "alphabet") return sortByAlphabet(filterByName(names));
+    return filterByName(names);
   };
 
   const names = sort();
@@ -79,7 +85,7 @@ const App = () => {
                     style={{ minWidth: "80px" }}
                     placeholder="Hae..."
                     value={searchInput}
-                    onChange={(e) => setSearchInput(e.target.value)}
+                    onChange={(e: any) => setSearchInput(e.target.value)}
                   ></TextField>
                 </div>
               </TableCell>
@@ -91,7 +97,7 @@ const App = () => {
                   <div>
                     <Select
                       value={sortBy}
-                      onChange={(e) => setSortBy(e.target.value)}
+                      onChange={(e: any) => setSortBy(e.target.value)}
                     >
                       <MenuItem value="popularity">Suosituimmat</MenuItem>
                       <MenuItem value="alphabet">Nimen mukaan</MenuItem>
@@ -108,7 +114,7 @@ const App = () => {
             {names.map((row) => (
               <TableRow key={row.name}>
                 <TableCell>{row.name}</TableCell>
-                <TableCell colSpan="3" align="right">
+                <TableCell colSpan={3} align="right">
                   {row.amount}
                 </TableCell>
               </TableRow>
